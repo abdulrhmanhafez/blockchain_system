@@ -1,0 +1,1168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InstaPay Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+        :root {
+            --primary-color: #6c5ce7;
+            --secondary-color: #a29bfe;
+            --accent-color: #00cec9;
+            --error-color: #ff7675;
+            --success-color: #55efc4;
+            --background-dark: #1a1a2e;
+            --background-light: #16213e;
+            --text-primary: #ffffff;
+            --text-secondary: #b2bec3;
+            --shadow-color: rgba(0, 0, 0, 0.3);
+            --card-bg: rgba(255, 255, 255, 0.05);
+            --hover-bg: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+  margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+  font-family: 'Segoe UI', Roboto, -apple-system, sans-serif;
+        }
+
+        body {
+            background: var(--background-dark);
+            min-height: 100vh;
+            color: var(--text-primary);
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .background-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.1;
+        }
+
+        .background-animation span {
+            position: absolute;
+            display: block;
+            width: 20px;
+            height: 20px;
+            background: var(--primary-color);
+            animation: animate 25s linear infinite;
+            bottom: -150px;
+            border-radius: 50%;
+        }
+
+        .background-animation span:nth-child(1) {
+            left: 25%;
+            width: 80px;
+            height: 80px;
+            animation-delay: 0s;
+        }
+
+        .background-animation span:nth-child(2) {
+            left: 10%;
+            width: 20px;
+            height: 20px;
+            animation-delay: 2s;
+            animation-duration: 12s;
+        }
+
+        .background-animation span:nth-child(3) {
+            left: 70%;
+            width: 20px;
+            height: 20px;
+            animation-delay: 4s;
+        }
+
+        .background-animation span:nth-child(4) {
+            left: 40%;
+            width: 60px;
+            height: 60px;
+            animation-delay: 0s;
+            animation-duration: 18s;
+        }
+
+        .background-animation span:nth-child(5) {
+            left: 65%;
+            width: 20px;
+            height: 20px;
+            animation-delay: 0s;
+        }
+
+        @keyframes animate {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+                border-radius: 0;
+            }
+            100% {
+                transform: translateY(-1000px) rotate(720deg);
+                opacity: 0;
+                border-radius: 50%;
+            }
+        }
+
+        .dashboard-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding: 1rem;
+            background: var(--background-light);
+            border-radius: 15px;
+            box-shadow: 0 8px 32px var(--shadow-color);
+        }
+
+        .welcome-text {
+            font-size: 1.5rem;
+            color: var(--text-primary);
+        }
+
+        .welcome-text span {
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .nav-button {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 10px;
+            background: var(--card-bg);
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-button:hover {
+            background: var(--hover-bg);
+            transform: translateY(-2px);
+        }
+
+        .nav-button i {
+            font-size: 1.2rem;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .card {
+            background: var(--background-light);
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: 0 8px 32px var(--shadow-color);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px var(--shadow-color);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .card-title {
+            font-size: 1.2rem;
+            color: var(--text-primary);
+        }
+
+        .card-icon {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+        }
+
+        .balance-amount {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--accent-color);
+            text-align: center;
+            margin: 1rem 0;
+        }
+
+        .transaction-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .form-group {
+            position: relative;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            padding-left: 40px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            background: var(--card-bg);
+            color: var(--text-primary);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.2);
+        }
+
+        .form-group i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+        }
+
+        .submit-button {
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: var(--text-primary);
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .submit-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(108, 92, 231, 0.4);
+        }
+
+        .message {
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 1rem;
+            text-align: center;
+            display: none;
+        }
+
+        .success-message {
+            background: rgba(85, 239, 196, 0.1);
+            color: var(--success-color);
+        }
+
+        .error-message {
+            background: rgba(255, 118, 117, 0.1);
+            color: var(--error-color);
+        }
+
+        .blockchain-data, .pending-data {
+            background: var(--card-bg);
+            padding: 1rem;
+            border-radius: 10px;
+            max-height: 300px;
+            overflow-y: auto;
+            font-family: monospace;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+            z-index: 9999;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-container {
+                padding: 1rem;
+            }
+
+            .header {
+                flex-direction: column;
+                gap: 1rem;
+      text-align: center;
+            }
+
+            .nav-buttons {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .transaction-item {
+            background: var(--card-bg);
+      border-radius: 10px;
+            padding: 1.2rem;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .transaction-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px var(--shadow-color);
+            border-color: var(--primary-color);
+        }
+
+        .transaction-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .transaction-type {
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+
+        .transaction-amount {
+            color: var(--accent-color);
+            font-weight: bold;
+        }
+
+        .transaction-details {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .transaction-parties {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+
+        .transaction-time {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .notification {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 1rem 2rem;
+            border-radius: 10px;
+      color: white;
+            font-weight: bold;
+            animation: slideIn 0.3s ease-out;
+            z-index: 1000;
+        }
+
+        .notification.success {
+            background: var(--success-color);
+        }
+
+        .notification.error {
+            background: var(--error-color);
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .no-transactions {
+            text-align: center;
+            color: var(--text-secondary);
+            padding: 2rem;
+            font-style: italic;
+        }
+
+        .transaction-status {
+            margin-top: 0.5rem;
+            text-align: right;
+        }
+
+        .status-badge {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+      font-weight: bold;
+        }
+
+        .status-badge i {
+            font-size: 0.9rem;
+        }
+
+        .status-badge.confirmed {
+            background: var(--success-color);
+            color: var(--background-dark);
+        }
+
+        .status-badge.pending {
+            background: var(--accent-color);
+            color: var(--background-dark);
+        }
+
+        .transactions-data {
+            background: var(--card-bg);
+            padding: 1rem;
+            border-radius: 10px;
+            max-height: 600px;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: var(--primary-color) var(--background-dark);
+        }
+
+        .transactions-data::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .transactions-data::-webkit-scrollbar-track {
+            background: var(--background-dark);
+            border-radius: 4px;
+        }
+
+        .transactions-data::-webkit-scrollbar-thumb {
+            background: var(--primary-color);
+            border-radius: 4px;
+        }
+
+        .transactions-data::-webkit-scrollbar-thumb:hover {
+            background: var(--secondary-color);
+        }
+
+        .transaction-info {
+            display: flex;
+            justify-content: space-between;
+            margin: 0.5rem 0;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .transaction-time, .transaction-hash {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .transaction-hash {
+            font-family: monospace;
+            font-size: 0.8rem;
+            word-break: break-all;
+        }
+
+        .loading-transactions {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            color: var(--text-secondary);
+        }
+
+        .loading-transactions .loading-spinner {
+            width: 40px;
+            height: 40px;
+            margin-bottom: 1rem;
+        }
+
+        .loading-transactions p {
+            font-size: 1rem;
+            margin: 0;
+        }
+
+        .error-message {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 1rem;
+            color: var(--error-color);
+            background: rgba(255, 118, 117, 0.1);
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+
+        .error-message i {
+            font-size: 1.2rem;
+        }
+
+        .transaction-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 0.5rem;
+            padding-top: 0.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .block-index {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .block-index i {
+            color: var(--primary-color);
+        }
+
+        .transaction-item {
+            background: var(--card-bg);
+            border-radius: 10px;
+            padding: 1.2rem;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .transaction-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px var(--shadow-color);
+            border-color: var(--primary-color);
+        }
+
+        .transaction-hash {
+            font-family: monospace;
+            font-size: 0.8rem;
+            word-break: break-all;
+            color: var(--text-secondary);
+        }
+
+        .pending-data {
+            padding: 20px;
+        }
+
+        .transactions-data {
+            padding: 20px;
+        }
+
+        .transaction-item {
+            background: #fff;
+            border-radius: 10px;
+            padding: 15px;
+      margin-bottom: 15px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: transform 0.2s ease;
+        }
+
+        .transaction-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+
+        .transaction-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .transaction-type {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .transaction-amount {
+            font-weight: 700;
+            color: #27ae60;
+        }
+
+        .transaction-details {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .transaction-parties {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        .transaction-info {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            font-size: 0.85em;
+            color: #888;
+        }
+
+        .transaction-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid #eee;
+        }
+
+        .block-index {
+            font-size: 0.85em;
+            color: #666;
+        }
+
+        .status-badge {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            font-weight: 600;
+        }
+
+        .status-badge.confirmed {
+            background: #e8f5e9;
+            color: #27ae60;
+        }
+
+        .status-badge.pending {
+            background: #fff3e0;
+            color: #f39c12;
+        }
+
+        .loading-transactions {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+            color: #666;
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+      margin-bottom: 15px;
+    }
+
+        .no-transactions {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+            font-style: italic;
+        }
+
+        .error-message {
+            text-align: center;
+            padding: 20px;
+            color: #e74c3c;
+            background: #fde8e8;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="loading-spinner"></div>
+    </div>
+
+    <div class="background-animation">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+
+    <div class="dashboard-container">
+        <header class="header">
+            <div class="welcome-text">
+                Welcome, <span id="userDisplay"></span>
+            </div>
+            <div class="nav-buttons">
+                <button class="nav-button" onclick="showSection('balance')">
+                    <i class="fas fa-wallet"></i> Balance
+                </button>
+                <button class="nav-button" onclick="showSection('transfer')">
+                    <i class="fas fa-paper-plane"></i> Send Money
+                </button>
+                <button class="nav-button" onclick="showSection('withdraw')">
+                    <i class="fas fa-money-bill-wave"></i> Withdraw
+                </button>
+                <button class="nav-button" onclick="showSection('pending')">
+                    <i class="fas fa-clock"></i> Pending
+                </button>
+                <button class="nav-button" onclick="mineBlock()">
+                    <i class="fas fa-hammer"></i> Mine
+                </button>
+                <button class="nav-button" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <section id="balance" class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Your Balance</h2>
+                    <i class="fas fa-wallet card-icon"></i>
+      </div>
+                <div class="balance-amount" id="balanceAmount">Loading...</div>
+            </section>
+
+            <section id="transfer" class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Send Money</h2>
+                    <i class="fas fa-paper-plane card-icon"></i>
+                </div>
+                <form class="transaction-form" onsubmit="sendMoney(); return false;">
+                    <div class="form-group">
+                        <i class="fas fa-user"></i>
+                        <input type="text" id="receiver" placeholder="Receiver Username" required>
+                    </div>
+                    <div class="form-group">
+                        <i class="fas fa-coins"></i>
+                        <input type="number" id="amount" placeholder="Amount" required>
+      </div>
+                    <button type="submit" class="submit-button">Send Money</button>
+                    <div id="transferMsg" class="message"></div>
+                </form>
+            </section>
+
+            <section id="withdraw" class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Withdraw Money</h2>
+                    <i class="fas fa-money-bill-wave card-icon"></i>
+                </div>
+                <form class="transaction-form" onsubmit="withdrawMoney(); return false;">
+                    <div class="form-group">
+                        <i class="fas fa-coins"></i>
+                        <input type="number" id="withdrawAmount" placeholder="Amount" required>
+      </div>
+                    <button type="submit" class="submit-button">Withdraw</button>
+                    <div id="withdrawMsg" class="message"></div>
+                </form>
+            </section>
+
+            <section id="pending" class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Pending Transactions</h2>
+                    <i class="fas fa-clock card-icon"></i>
+      </div>
+                <div class="pending-data" id="pendingData">Loading...</div>
+            </section>
+
+            <section id="transactions" class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Transaction History</h2>
+                    <i class="fas fa-history card-icon"></i>
+      </div>
+                <div class="transactions-data" id="transactionsData">Loading...</div>
+            </section>
+        </main>
+  </div>
+
+  <script>
+    let currentUser = "";
+
+        window.onload = async function() {
+            const user = localStorage.getItem('currentUser');
+            if (!user) {
+                window.location.href = '/login.html#';
+                return;
+            }
+
+            try {
+                const response = await fetch(`/api/balance/${user}`);
+                if (!response.ok) {
+                    throw new Error('User session invalid');
+                }
+
+                currentUser = user;
+                document.getElementById('userDisplay').textContent = currentUser;
+                
+                // التحقق من نوع المستخدم
+                const isMiner = user.startsWith('miner');
+                
+                // إخفاء/إظهار الأقسام حسب نوع المستخدم
+                if (isMiner) {
+                    // إخفاء أقسام المستخدم العادي
+                    document.getElementById('transfer').style.display = 'none';
+                    document.getElementById('withdraw').style.display = 'none';
+                    document.getElementById('balance').style.display = 'none';
+                    
+                    // إظهار أقسام المعدن
+                    document.getElementById('pending').style.display = 'block';
+                    document.getElementById('transactions').style.display = 'block';
+                    
+                    // تحديث الأزرار في القائمة
+                    const navButtons = document.querySelector('.nav-buttons');
+                    navButtons.innerHTML = `
+                        <button class="nav-button" onclick="showSection('pending')">
+                            <i class="fas fa-clock"></i> Pending Transactions
+                        </button>
+                        <button class="nav-button" onclick="showSection('transactions')">
+                            <i class="fas fa-history"></i> All Transactions
+                        </button>
+                        <button class="nav-button" onclick="mineBlock()">
+                            <i class="fas fa-hammer"></i> Mine Transactions
+                        </button>
+                        <button class="nav-button" onclick="logout()">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </button>
+                    `;
+                    
+                    // بدء التحديث التلقائي
+                    startPendingTransactionsUpdate();
+                    startTransactionsUpdate();
+                } else {
+                    // إظهار أقسام المستخدم العادي
+                    document.getElementById('balance').style.display = 'block';
+                    document.getElementById('transfer').style.display = 'none';
+                    document.getElementById('withdraw').style.display = 'none';
+                    document.getElementById('pending').style.display = 'none';
+                    document.getElementById('transactions').style.display = 'block';
+                    
+                    // تحديث الأزرار في القائمة للمستخدم العادي
+                    const navButtons = document.querySelector('.nav-buttons');
+                    navButtons.innerHTML = `
+                        <button class="nav-button" onclick="showSection('balance')">
+                            <i class="fas fa-wallet"></i> Balance
+                        </button>
+                        <button class="nav-button" onclick="showSection('transfer')">
+                            <i class="fas fa-paper-plane"></i> Send Money
+                        </button>
+                        <button class="nav-button" onclick="showSection('withdraw')">
+                            <i class="fas fa-money-bill-wave"></i> Withdraw
+                        </button>
+                        <button class="nav-button" onclick="showSection('transactions')">
+                            <i class="fas fa-history"></i> My Transactions
+                        </button>
+                        <button class="nav-button" onclick="logout()">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </button>
+                    `;
+                }
+                
+                fetchBalance();
+                fetchTransactions();
+            } catch (err) {
+                console.error('Session error:', err);
+                localStorage.removeItem('currentUser');
+                localStorage.removeItem('isAdmin');
+                window.location.href = '/login.html#';
+            } finally {
+                const loadingOverlay = document.getElementById('loadingOverlay');
+                if (loadingOverlay) {
+                    loadingOverlay.style.display = 'none';
+                }
+            }
+        }
+
+    function showSection(id) {
+            ['balance', 'transfer', 'withdraw', 'pending', 'transactions'].forEach(sec => {
+        document.getElementById(sec).style.display = 'none';
+      });
+      document.getElementById(id).style.display = 'block';
+
+      if (id === 'balance') fetchBalance();
+      if (id === 'pending') fetchPending();
+            if (id === 'transactions') fetchTransactions();
+    }
+
+    function fetchBalance() {
+      fetch(`/api/balance/${currentUser}`)
+        .then(res => res.json())
+        .then(data => {
+          document.getElementById('balanceAmount').textContent = `${data.balance} EGP`;
+        });
+    }
+
+    function sendMoney() {
+      const receiver = document.getElementById('receiver').value.trim();
+      const amount = parseFloat(document.getElementById('amount').value);
+      const msg = document.getElementById('transferMsg');
+
+      if (!receiver || isNaN(amount) || amount <= 0) {
+        msg.textContent = "Please enter a valid receiver and amount.";
+                msg.className = 'message error-message';
+                msg.style.display = 'block';
+        return;
+      }
+
+      fetch('/api/transactions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ sender: currentUser, receiver, amount })
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          msg.textContent = `✅ ${data.message}`;
+                    msg.className = 'message success-message';
+          fetchBalance();
+          fetchPending();
+        } else {
+          msg.textContent = `❌ ${data.error || data.message}`;
+                    msg.className = 'message error-message';
+        }
+                msg.style.display = 'block';
+      })
+      .catch(err => {
+        msg.textContent = "Server error while sending money.";
+                msg.className = 'message error-message';
+                msg.style.display = 'block';
+        console.error(err);
+      });
+    }
+
+    function withdrawMoney() {
+      const amount = parseFloat(document.getElementById('withdrawAmount').value);
+            const msg = document.getElementById('withdrawMsg');
+
+      fetch('/api/withdraw', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ user: currentUser, amount })
+      })
+      .then(res => res.json())
+      .then(data => {
+                msg.textContent = data.message;
+                msg.className = data.success ? 'message success-message' : 'message error-message';
+                msg.style.display = 'block';
+                if (data.success) {
+        fetchBalance();
+                }
+            })
+            .catch(err => {
+                msg.textContent = "Server error while withdrawing money.";
+                msg.className = 'message error-message';
+                msg.style.display = 'block';
+                console.error(err);
+        });
+    }
+
+    function fetchPending() {
+      fetch('/api/pending')
+        .then(res => res.json())
+        .then(data => {
+                    const pendingData = document.getElementById('pendingData');
+                    if (data.length === 0) {
+                        pendingData.innerHTML = '<div class="no-transactions">No pending transactions</div>';
+                        return;
+                    }
+
+                    const transactionsHtml = data.map(tx => `
+                        <div class="transaction-item">
+                            <div class="transaction-header">
+                                <span class="transaction-type">${tx.type || 'Transfer'}</span>
+                                <span class="transaction-amount">${tx.amount} EGP</span>
+                            </div>
+                            <div class="transaction-details">
+                                <div class="transaction-parties">
+                                    <span class="sender">From: ${tx.sender}</span>
+                                    <span class="receiver">To: ${tx.receiver}</span>
+                                </div>
+                                <div class="transaction-time">
+                                    ${new Date(tx.timestamp).toLocaleString()}
+                                </div>
+                            </div>
+                        </div>
+                    `).join('');
+
+                    pendingData.innerHTML = transactionsHtml;
+        });
+    }
+
+    function mineBlock() {
+            const loadingOverlay = document.getElementById('loadingOverlay');
+            loadingOverlay.style.display = 'flex';
+
+      fetch('/api/mine', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ miner: currentUser })
+      })
+      .then(res => res.json())
+      .then(data => {
+                if (data.success) {
+                    showNotification('Block mined successfully!', 'success');
+        fetchPending();
+                } else {
+                    showNotification(data.error || 'Failed to mine block', 'error');
+                }
+      })
+      .catch(err => {
+                showNotification('Error while mining block', 'error');
+        console.error(err);
+            })
+            .finally(() => {
+                loadingOverlay.style.display = 'none';
+      });
+    }
+
+    function logout() {
+            localStorage.removeItem('currentUser');
+            localStorage.removeItem('isAdmin');
+            window.location.href = '/login.html#';
+        }
+
+        // دالة لتحديث المعاملات المعلقة تلقائياً
+        function startPendingTransactionsUpdate() {
+            // تحديث كل 5 ثواني
+            setInterval(fetchPending, 5000);
+        }
+
+        // دالة لعرض الإشعارات
+        function showNotification(message, type) {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+
+        function fetchTransactions() {
+            const transactionsData = document.getElementById('transactionsData');
+            transactionsData.innerHTML = `
+                <div class="loading-transactions">
+                    <div class="loading-spinner"></div>
+                    <p>Loading transactions...</p>
+                </div>
+            `;
+
+            const isMiner = currentUser.startsWith('miner');
+            const url = isMiner ? '/api/validated-transactions' : `/api/user-transactions/${currentUser}`;
+
+            console.log('Fetching transactions from:', url);
+
+            fetch(url)
+                .then(res => {
+                    console.log('Response status:', res.status);
+                    if (!res.ok) {
+                        throw new Error(`HTTP error! status: ${res.status}`);
+                    }
+                    return res.json();
+                })
+                .then(data => {
+                    console.log('Received data:', data);
+                    if (!Array.isArray(data)) {
+                        throw new Error('Invalid data format received from server');
+                    }
+
+                    if (data.length === 0) {
+                        transactionsData.innerHTML = '<div class="no-transactions">No transactions found</div>';
+                        return;
+                    }
+
+                    const transactionsHtml = data.map(tx => `
+                        <div class="transaction-item">
+                            <div class="transaction-header">
+                                <span class="transaction-type">${tx.type || 'Transfer'}</span>
+                                <span class="transaction-amount">${tx.amount} EGP</span>
+                            </div>
+                            <div class="transaction-details">
+                                <div class="transaction-parties">
+                                    <span class="sender">From: ${tx.sender}</span>
+                                    <span class="receiver">To: ${tx.receiver}</span>
+                                </div>
+                                <div class="transaction-info">
+                                    <div class="transaction-time">
+                                        <i class="fas fa-clock"></i> ${new Date(tx.timestamp).toLocaleString()}
+                                    </div>
+                                    <div class="transaction-hash">
+                                        <i class="fas fa-fingerprint"></i> ${tx.hash}
+                                    </div>
+                                </div>
+                                <div class="transaction-meta">
+                                    <span class="block-index">
+                                        <i class="fas fa-cube"></i> Block: ${tx.blockIndex !== null ? tx.blockIndex : 'Pending'}
+                                    </span>
+                                    <span class="status-badge ${tx.status === 'confirmed' ? 'confirmed' : 'pending'}">
+                                        <i class="fas ${tx.status === 'confirmed' ? 'fa-check-circle' : 'fa-clock'}"></i>
+                                        ${tx.status === 'confirmed' ? 'Confirmed' : 'Pending'}
+                                    </span>
+                                    ${tx.validatedBy ? `
+                                        <span class="validator-info">
+                                            <i class="fas fa-user-shield"></i> Validated by: ${tx.validatedBy}
+                                        </span>
+                                    ` : ''}
+                                </div>
+                            </div>
+                        </div>
+                    `).join('');
+
+                    transactionsData.innerHTML = transactionsHtml;
+                })
+                .catch(error => {
+                    console.error('Error fetching transactions:', error);
+                    transactionsData.innerHTML = `
+                        <div class="error-message">
+                            <i class="fas fa-exclamation-circle"></i>
+                            Failed to load transactions: ${error.message}
+                        </div>
+                    `;
+                });
+        }
+
+        function startTransactionsUpdate() {
+            setInterval(fetchTransactions, 5000);
+    }
+  </script>
+</body>
+</html>
