@@ -1,0 +1,62 @@
+{
+    "ahmed": {
+        "password": "a123",
+        "balance": 100
+    },
+    "omar": {
+        "password": "o123",
+        "balance": 250
+    },
+    "salma": {
+        "password": "s123",
+        "balance": 0
+    },
+    "mohamed": {
+        "password": "m123",
+        "balance": 0
+    },
+    "hassan": {
+        "password": "h123",
+        "balance": 2500000
+    },
+    "laila": {
+        "password": "l123",
+        "balance": 3000000
+    },
+    "youssef": {
+        "password": "y123",
+        "balance": 2750000
+    },
+    "farah": {
+        "password": "f123",
+        "balance": 3200000
+    },
+    "nour": {
+        "password": "n123",
+        "balance": 2900000
+    },
+    "khaled": {
+        "password": "k123",
+        "balance": 2600000
+    },
+    "admin": {
+        "password": "root",
+        "isAdmin": true
+        
+    },
+    "miner1": {
+        "password": "minerpass1",
+        "balance": 10,
+        "isMiner": true
+    },
+    "miner2": {
+        "password": "minerpass2",
+        "balance": 0,
+        "isMiner": true
+    },
+    "miner3": {
+        "password": "minerpass3",
+        "balance": 0,
+        "isMiner": true
+    }
+}
